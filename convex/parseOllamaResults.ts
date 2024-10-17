@@ -6,11 +6,10 @@ export const parseOllamaResults = mutation({
   },
   handler: async (ctx, { analysisResults }) => {
     // Example parsing logic
-    const damageDetails = analysisResults.predictions.map(prediction => ({
-      part: prediction.label,
-      damageSeverity: prediction.score,
-    }));
+    return analysisResults.predictions.map(prediction => ({
+          part: prediction.label,
+          damageSeverity: prediction.score,
+        }));
 
-    return damageDetails;
   },
 });
