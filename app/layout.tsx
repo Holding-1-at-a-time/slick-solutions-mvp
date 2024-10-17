@@ -1,31 +1,31 @@
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { Navigation } from "@/components/Navigation";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "My App Title",
-  description: "My app description",
-};
+// Create a Layout component in this file if it doesn't exist elsewhere
+const Layout = ({ children }: { children: React.ReactNode }) => (
+  <div>{children}</div>
+);
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+if (!convexUrl) {
+  throw new Error('NEXT_PUBLIC_CONVEX_URL environment variable is not set');
+}
+const convex = new ConvexReactClient(convexUrl);
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <Header />
-       <Navigation />
-        <body className={inter.className}>
-         <ConvexClientProvider>{children}</ConvexClientProvider>
-        </body>
-      <Footer />
+      <ClerkProvider>
+        <ConvexProvider client={convex}>
+          <body>
+            <Layout>{children}</Layout>
+          </body>
+        </ConvexProvider>
+      </ClerkProvider>
     </html>
-  );
+  )
 }
