@@ -2,8 +2,7 @@
 // of the database is entirely optional in Convex.
 // See https://docs.convex.dev/database/schemas.
 
-import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import { defineSchema, defineTable, s } from "convex/schema";
 
 export default defineSchema(
   {
@@ -11,6 +10,21 @@ export default defineSchema(
       name: v.string(),
       email: v.string(),
       clerkId: v.string(),
+<<<<<<< HEAD
+      tenantId: v.string(),
+      role: v.string(),
+    }).index("by_clerk_id", ["clerkId"])
+      .index("by_tenant", ["tenantId"]),
+
+    tenants: defineTable({
+      name: v.string(),
+      clerkOrgId: v.string(),
+      settings: v.object({
+        theme: v.string(),
+        features: v.array(v.string()),
+      }),
+    }).index("by_clerk_org_id", ["clerkOrgId"]),
+=======
       username: v.optional(v.string()),
       firstName: v.optional(v.string()),
       lastName: v.optional(v.string()),
@@ -22,12 +36,13 @@ export default defineSchema(
       metadata: v.optional(v.object()),
       organizationId: v.optional(v.string()),
     }).index("by_clerk_id", ["clerkId"]),
+>>>>>>> 6fca2e06db16e5d1ed44589596cfc4c99769d6ff
 
     organizations: defineTable({
       name: v.string(),
+      tenantId: v.string(),
       logo: v.optional(v.string()),
       slug: v.string(),
-      tenantId: v.string(),
     }).index("by_tenant_id", ["tenantId"]),
 
     organizationMemberships: defineTable({
@@ -38,31 +53,42 @@ export default defineSchema(
     }).index("by_user_and_org", ["userId", "organizationId"]),
 
     assessments: defineTable({
-      userId: v.id("users"),
-      organizationId: v.id("organizations"),
-      vehicleType: v.string(),
-      damageDescription: v.string(),
-      images: v.array(v.string()),
-      status: v.string(),
-    }),
-
-    estimates: defineTable({
-      assessmentId: v.id("assessments"),
-      totalPrice: v.number(),
-      lineItems: v.array(v.object({
-        description: v.string(),
-        price: v.number(),
-      })),
-      status: v.string(),
-    }),
+      userId: s.id("users"),
+      tenantId: s.id("tenants"),
+      vehicleInfo: s.struct({
+        make: s.string(),
+        model: s.string(),
+        year: s.number(),
+        vin: s.string(),
+      }),
+      exteriorCondition: s.struct({
+        bodyCondition: s.string(),
+        paintCondition: s.string(),
+        wheelCondition: s.string(),
+      }),
+      interiorCondition: s.struct({
+        seatCondition: s.string(),
+        dashboardCondition: s.string(),
+        carpetCondition: s.string(),
+      }),
+      additionalDetails: s.struct({
+        notes: s.optional(s.string()),
+        requestedServices: s.array(s.string()),
+      }),
+      status: s.string(),
+      createdAt: s.number(),
+      updatedAt: s.number(),
+      version: s.number(),
+    }).index("by_user", ["userId"])
+      .index("by_tenant", ["tenantId"]),
   },
   // If you ever get an error about schema mismatch
   // between your data and your schema, and you cannot
   // change the schema to match the current data in your database,
   // you can:
-  //  1. Use the dashboard to delete tables or individual documents
-  //     that are causing the error.
-  //  2. Change this option to `false` and make changes to the data
-  //     freely, ignoring the schema. Don't forget to change back to `true`!
+  //   1. Use the dashboard to delete tables or individual documents
+  //      that are causing the error.
+  //   2. Change this option to `false` and make changes to the data
+  //      freely, ignoring the schema. Don't forget to change back to `true`!
   { schemaValidation: true }
 );

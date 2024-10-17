@@ -3,18 +3,11 @@ import { v } from "convex/values";
 
 export const createOrUpdateUser = mutation({
   args: {
-    clerkId: v.string(),
     name: v.string(),
     email: v.string(),
-    username: v.optional(v.string()),
-    firstName: v.optional(v.string()),
-    lastName: v.optional(v.string()),
-    createdAt: v.string(),
-    updatedAt: v.string(),
-    phoneNumber: v.optional(v.string()),
-    emailVerified: v.boolean(),
-    hasVerifiedContactInfo: v.boolean(),
-    metadata: v.optional(v.string()),
+    clerkId: v.string(),
+    tenantId: v.string(),
+    role: v.string(),
   },
   handler: async (ctx, args) => {
     const existingUser = await ctx.db
@@ -40,19 +33,15 @@ export const getUser = query({
   },
 });
 
-export const updateUser = mutation({
-  args: {
-    clerkId: v.string(),
-    name: v.optional(v.string()),
-    email: v.optional(v.string()),
-    username: v.optional(v.string()),
-    phoneNumber: v.optional(v.string()),
-    metadata: v.optional(v.string()),
-  },
+export const getUsersByTenant = query({
+  args: { tenantId: v.string() },
   handler: async (ctx, args) => {
-    const { clerkId, ...updateFields } = args;
-    const user = await ctx.db
+    return await ctx.db
       .query("users")
+<<<<<<< HEAD
+      .withIndex("by_tenant", (q) => q.eq("tenantId", args.tenantId))
+      .collect();
+=======
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
       .first();
     if (user) {
@@ -74,5 +63,6 @@ export const deleteUser = mutation({
     if (user) {
       await ctx.db.delete(user._id);
     }
+>>>>>>> 6fca2e06db16e5d1ed44589596cfc4c99769d6ff
   },
 });

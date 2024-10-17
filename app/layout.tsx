@@ -1,8 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+import "./globals.css";
 
-// Create a Layout component in this file if it doesn't exist elsewhere
 const Layout = ({ children }: { children: React.ReactNode }) => (
   <div>{children}</div>
 );
@@ -42,4 +41,4 @@ export default function RootLayout({
       </ClerkProvider>
     </html>
   )
-}
+};
