@@ -2,7 +2,7 @@ import { action } from "./_generated/server";
 
 export const processAssessmentData = action(async (ctx, assessmentId) => {
   const assessment = await ctx.db.get(assessmentId);
-  if (!assessment) throw new Error("Assessment not found");
+  if (!assessment) {
 
   // Process data here
   // Example: Analyze vehicle images, calculate estimates, etc.
