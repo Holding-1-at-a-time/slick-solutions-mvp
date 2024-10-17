@@ -1,10 +1,10 @@
-import { OrganizationList } from "@clerk/nextjs";
+import { OrganizationList } from '@clerk/nextjs';
 
 export default function SelectOrganizationPage() {
   return (
     <OrganizationList 
       hidePersonal
-      afterSelectOrganizationUrl={`/${org.id}/dashboard`}
+      afterSelectOrganizationUrl="/dashboard"
       afterCreateOrganizationUrl="/dashboard"
     />
   );
