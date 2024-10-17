@@ -129,7 +129,7 @@
       {
         "description": "Design a scalable system capable of handling a minimum of 10,000 concurrent users.",
         "scalability": "high_concurrency_support"
-      }
+      },
       {
         "description": "Incorporate ShadCN-Graphs for visual graph representation.",
         "visualization": "shadcn_graphs"
@@ -221,7 +221,7 @@
       {
         "description": "Include a comprehensive knowledge base for user guides and tutorials.",
         "feature": "knowledge_base"
-      };
+      }
     ]
   }
 }

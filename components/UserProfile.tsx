@@ -9,11 +9,32 @@ export default function UserProfile() {
 
   if (!user || !convexUser) return <div>Loading...</div>;
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const updatedUser = {
+      // Get the updated user data from the form
+      name: formData.get("name"),
+      email: formData.get("email"),
+    };
+    await updateUser(updatedUser);
+  };
+
   return (
     <div>
       <h1>{user.fullName}</h1>
       <p>{user.primaryEmailAddress?.emailAddress}</p>
-      {/* Add form to update user details */}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" name="name" defaultValue={user.fullName} />
+        </label>
+        <label>
+          Email:
+          <input type="email" name="email" defaultValue={user.primaryEmailAddress?.emailAddress} />
+        </label>
+        <button type="submit">Update</button>
+      </form>
     </div>
   );
 }

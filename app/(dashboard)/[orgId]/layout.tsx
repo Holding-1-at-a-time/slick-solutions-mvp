@@ -1,6 +1,5 @@
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { Navigation } from "@/components/Navigation";
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 
 export default function DashboardLayout({
   children,
@@ -18,14 +17,10 @@ export default function DashboardLayout({
           afterLeaveOrganizationUrl="/select-org"
           afterSelectOrganizationUrl={`/${params.orgId}/dashboard`}
         />
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
       </header>
       <Navigation />
-      <main>
-       <ConvexClientProvider>
-          {children}        
-       </ConvexClientProvider>
-        </main>
+      <main>{children}</main>
     </div>
   );
 }
