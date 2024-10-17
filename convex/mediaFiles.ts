@@ -1,23 +1,22 @@
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { addToQueue } from "./queue";
 
-export const uploadFile = mutation(async ({ db, auth }, file: Buffer, fileName: string, tenantId: string) => {
-  const user = auth.userId();
-  if (!user) throw new Error("Unauthorized access");
+export const uploadFile = mutation({
+  args: {
+    file: v.bytes(),
+    fileName: v.string(),
+  },
+  handler: async (ctx, { file, fileName }) => {
+    const fileId = await ctx.db.insert("mediaFiles", {
+      file,
+      fileName,
+      uploadedAt: new Date(),
+    });
 
-  // Check if the user belongs to the tenant
-  const tenant = await db.query("tenants").filter(q => q.eq(q.field("id"), tenantId)).first();
-  if (!tenant || !tenant.users.includes(user)) {
-    throw new Error("Access denied");
-  }
+    // Add to processing queue
+    addToQueue(fileId);
 
-  const fileId = v.bytes(file);
-  await db.insert("mediaFiles", {
-    fileId,
-    fileName,
-    tenantId,
-    userId: user,
-    createdAt: new Date(),
-  });
-  return fileId;
+    return fileId;
+  },
 });
