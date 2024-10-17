@@ -1,4 +1,3 @@
-'use client'
 import { useAuth, useSignIn } from '@clerk/nextjs'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/navigation'
@@ -27,22 +26,25 @@ const ForgotPasswordPage: NextPage = () => {
     }
 
     // Send the password reset code to the user's email
-    async function create(e: React.FormEvent) {
-        e.preventDefault()
-        await signIn
-            ?.create({
+    async function sendResetCode(event: React.FormEvent) {
+        event.preventDefault()
+        try {
+            const { createdSessionId } = await signIn?.create({
                 strategy: 'reset_password_email_code',
                 identifier: email,
             })
-            .then((_) => {
-                setSuccessfulCreation(true)
-                setError('')
-            })
-            .catch((err) => {
-                console.error('error', err.errors[0].longMessage)
-                setError(err.errors[0].longMessage)
-            })
+            await signIn?.sendVerification({ sessionId: createdSessionId })
+            setSuccessfulCreation(true)
+            setError('')
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError('An unexpected error occurred');
+            }
+        }
     }
+
 
     // Reset the user's password.
     // Upon successful reset, the user will be
@@ -82,7 +84,6 @@ const ForgotPasswordPage: NextPage = () => {
                 maxWidth: '500px',
             }}
         >
-            <h1>Forgot Password?</h1>
             <form
                 style={{
                     display: 'flex',
@@ -91,6 +92,8 @@ const ForgotPasswordPage: NextPage = () => {
                 }}
                 onSubmit={!successfulCreation ? create : reset}
             >
+                <button onClick={(event) => sendResetCode(event)}>Send Reset Code</button>
+                
                 {!successfulCreation && (
                     <>
                         <label htmlFor="email">Please provide your email address</label>

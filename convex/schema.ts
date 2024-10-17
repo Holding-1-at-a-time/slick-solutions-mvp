@@ -7,15 +7,53 @@ import { v } from "convex/values";
 
 export default defineSchema(
   {
-    documents: defineTable({
-      fieldOne: v.string(),
-      fieldTwo: v.object({
-        subFieldOne: v.array(v.number()),
-      }),
+    users: defineTable({
+      name: v.string(),
+      email: v.string(),
+      clerkId: v.string(),
+      username: v.optional(v.string()),
+      firstName: v.optional(v.string()),
+      lastName: v.optional(v.string()),
+      createdAt: v.string(),
+      updatedAt: v.string(),
+      phoneNumber: v.optional(v.string()),
+      emailVerified: v.boolean(),
+      hasVerifiedContactInfo: v.boolean(),
+      metadata: v.optional(v.object()),
+      organizationId: v.optional(v.string()),
+    }).index("by_clerk_id", ["clerkId"]),
+
+    organizations: defineTable({
+      name: v.string(),
+      logo: v.optional(v.string()),
+      slug: v.string(),
+      tenantId: v.string(),
+    }).index("by_tenant_id", ["tenantId"]),
+
+    organizationMemberships: defineTable({
+      userId: v.id("users"),
+      organizationId: v.id("organizations"),
+      role: v.string(),
+      permissions: v.array(v.string()),
+    }).index("by_user_and_org", ["userId", "organizationId"]),
+
+    assessments: defineTable({
+      userId: v.id("users"),
+      organizationId: v.id("organizations"),
+      vehicleType: v.string(),
+      damageDescription: v.string(),
+      images: v.array(v.string()),
+      status: v.string(),
     }),
-    // This definition matches the example query and mutation code:
-    numbers: defineTable({
-      value: v.number(),
+
+    estimates: defineTable({
+      assessmentId: v.id("assessments"),
+      totalPrice: v.number(),
+      lineItems: v.array(v.object({
+        description: v.string(),
+        price: v.number(),
+      })),
+      status: v.string(),
     }),
   },
   // If you ever get an error about schema mismatch

@@ -1,4 +1,4 @@
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 import Link from "next/link";
 
 export function Header() {
@@ -11,15 +11,13 @@ export function Header() {
         <div className="flex items-center space-x-4">
           <OrganizationSwitcher 
             hidePersonal
-            createOrganizationUrl="/create-organization"
             afterCreateOrganizationUrl="/dashboard"
             afterLeaveOrganizationUrl="/select-org"
             afterSelectOrganizationUrl="/dashboard"
           />
           <UserButton 
             afterSignOutUrl="/"
-            userProfileMode="navigation"
-            userProfileUrl="/user-profile"
+            userProfileMode="modal"
           />
         </div>
       </div>

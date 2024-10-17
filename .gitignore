@@ -31,6 +31,17 @@ yarn-error.log*
 
 # env files (can opt-in for commiting if needed)
 .env*
+.env.local
+# cursor
+.curorrules
+# Clerk Middleware
+/middleware.ts
+.next
+
+# Bun
+bun.lockb
+
+/components\ConvexClientProvider.tsx
 
 # vercel
 .vercel
