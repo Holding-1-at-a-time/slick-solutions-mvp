@@ -7,7 +7,8 @@ export default function UserProfile() {
   const convexUser = useQuery(api.users?.getUser, { clerkId: user?.id ?? "" });
   const updateUser = useMutation(api.users?.updateUser);
 
-  if (!user || !convexUser) return <div>Loading...</div>;
+  if (!user) return Loading user...;
+  if (!convexUser) return User not found in database;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

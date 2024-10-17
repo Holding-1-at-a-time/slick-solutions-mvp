@@ -37,7 +37,11 @@ const ForgotPasswordPage: NextPage = () => {
             setSuccessfulCreation(true)
             setError('')
         } catch (error) {
-            setError(error.errors[0].message)
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError('An unexpected error occurred');
+            }
         }
     }
 

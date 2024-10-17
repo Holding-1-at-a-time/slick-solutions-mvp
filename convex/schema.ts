@@ -10,6 +10,7 @@ export default defineSchema(
       name: v.string(),
       email: v.string(),
       clerkId: v.string(),
+<<<<<<< HEAD
       tenantId: v.string(),
       role: v.string(),
     }).index("by_clerk_id", ["clerkId"])
@@ -23,6 +24,19 @@ export default defineSchema(
         features: v.array(v.string()),
       }),
     }).index("by_clerk_org_id", ["clerkOrgId"]),
+=======
+      username: v.optional(v.string()),
+      firstName: v.optional(v.string()),
+      lastName: v.optional(v.string()),
+      createdAt: v.string(),
+      updatedAt: v.string(),
+      phoneNumber: v.optional(v.string()),
+      emailVerified: v.boolean(),
+      hasVerifiedContactInfo: v.boolean(),
+      metadata: v.optional(v.object()),
+      organizationId: v.optional(v.string()),
+    }).index("by_clerk_id", ["clerkId"]),
+>>>>>>> 6fca2e06db16e5d1ed44589596cfc4c99769d6ff
 
     organizations: defineTable({
       name: v.string(),
