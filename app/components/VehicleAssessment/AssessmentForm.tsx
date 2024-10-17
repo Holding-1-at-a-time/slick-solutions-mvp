@@ -33,7 +33,7 @@ const AssessmentForm = () => {
     resolver: zodResolver(schema),
     mode: 'onBlur',
   });
-  const { assessment, setAssessment } = useContext(AssessmentContext);
+  const { assessment, setAssessment } = useContext(AssessmentContext) as { assessment: Assessment, setAssessment: (assessment: Assessment) => void };
   const { user } = useUser();
   const { organization } = useOrganization();
   const router = useRouter();
