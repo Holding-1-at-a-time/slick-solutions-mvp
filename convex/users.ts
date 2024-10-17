@@ -56,8 +56,11 @@ export const updateUser = mutation({
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
       .first();
     if (user) {
-      await ctx.db.patch(user._id, updateFields);
-    }
+      if (user) {
+        const updatedUser = await ctx.db.patch(user._id, updateFields);
+        return updatedUser;
+      }
+      return null;
   },
 });
 
