@@ -1,0 +1,51 @@
+name: CI
+on:
+  push: 
+
+jobs:
+  lint-and-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    # this is for the GITHUB_TOKEN's permissions so the action always has
+    # access to the checks and pull request claim
+    # this is not needed in this example because we don't use status checks here
+    permissions:
+      checks: write
+      pull-requests: read
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Nodejs environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+      - name: Install Dependencies
+        run: pnpm --frozen-lockfile
+      - name: Lint Action
+
+        # this line stores the output of eslint in a json file.
+        # be sure to change the --output-file not only here but also 
+        # when calling the action
+        run: npm lint --output-file eslint_report.json --format json
+
+        # this line will allow the workflow to proceed even though eslint 
+        # failed because of an error. This is important because otherwise the 
+        # action cannot annotate your code.
+        continue-on-error: true
+
+      - name: Type Check Action
+
+        # this line stores the output of the command in a file that the action 
+        # can read to annotate
+        run: npm build --noEmit > typescript.log
+
+        # same as above
+        continue-on-error: true
+
+      - name: Annotate Code
+        uses: DerLev/eslint-annotations@v2
+        with:
+          eslint-report: eslint_report.json
+          typescript-log: typescript.log
