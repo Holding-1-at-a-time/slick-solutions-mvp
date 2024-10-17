@@ -39,12 +39,11 @@ export const analyzeVehicleDamage = mutation({
       throw new Error("Image not found");
     }
 
-    const results = await ollamaClient.analyze({
-      model: "llava",
-      input: image.fileBuffer, // Assuming fileBuffer is where the image data is stored
-    });
+    return await ollamaClient.analyze({
+          model: "llava",
+          input: image.fileBuffer, // Assuming fileBuffer is where the image data is stored
+        });
 
-    return results;
   },
 });
 
