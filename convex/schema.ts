@@ -19,7 +19,7 @@ export default defineSchema(
       phoneNumber: v.optional(v.string()),
       emailVerified: v.boolean(),
       hasVerifiedContactInfo: v.boolean(),
-      metadata: v.optional(v.string()),
+      metadata: v.optional(v.object()),
       organizationId: v.optional(v.string()),
     }).index("by_clerk_id", ["clerkId"]),
 
